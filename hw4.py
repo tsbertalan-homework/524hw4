@@ -1,7 +1,7 @@
 import numpy as np
 import sys
 import matplotlib.pyplot as plt
-Nx = Ny = 32
+Nx = Ny = 8
 pi = np.pi
 t0 = 0
 kappa = 0.4
@@ -16,46 +16,38 @@ print 'dt is', dt
 print 'tmax is', tmax
 Nsteps = int(np.ceil((tmax - t0) / dt))
 print 'Nsteps is', Nsteps
-Teven = np.empty((Nx, Ny))
-Todd = np.empty((Nx, Ny))
+T = np.empty((Nx, Ny, 2))
 
 #ICs:
-Todd[:, :] = 0
-Teven[:, :] = 0
+T[:, :, :] = 0
 for i in xrange(Nx):
     for j in xrange(Ny):
 
-        Todd[i, 0] = np.sin(i * dx) ** 2
-        Todd[i, -1] = np.cos(i * dx) ** 2
-        Teven[i, 0] = np.sin(i * dx) ** 2
-        Teven[i, -1] = np.cos(i * dx) ** 2
+        T[i,  0, :] = np.sin(i * dx) ** 2
+        T[i, -1, :] = np.cos(i * dx) ** 2
 
 for k in xrange(Nsteps - 1):
-    if k%2:  # if k is odd, this is True.
-        T = Todd
-        Tnext = Teven
-    else:
-        T = Teven
-        Tnext = Todd
+    next_k = k%2
+    this_k = (k+1)%2
     for i in xrange(0, Nx - 1):
         for j in xrange(1, Ny - 1):
-            Tnext[i, 0] = np.sin(i * dx) ** 2  # forcing
-            Tnext[i, -1] = np.cos(i * dx) ** 2
-            Tnext[i, j] = T[i, j] + dt * kappa / dx / dy * (\
-                                    + T[i - 1, j] + T[i + 1, j] \
-                                    + T[i, j - 1] + T[i, j + 1] \
-                                    - 4 * T[i, j] \
+            T[i, 0, next_k] = np.sin(i * dx) ** 2  # forcing
+            T[i, -1, next_k] = np.cos(i * dx) ** 2
+            T[i, j, next_k] = T[i, j, this_k] + dt * kappa / dx / dy * (\
+                                    + T[i - 1, j, this_k] + T[i + 1, j, this_k]\
+                                    + T[i, j - 1, this_k] + T[i, j + 1, this_k]\
+                                    - 4 * T[i, j, this_k]\
                                 )
     for j in xrange(1, Ny - 1):
-        Tnext[-1, j] = Tnext[0, j]  # Periodic left/right boundaries
-    sys.stdout.write('\r step ' + '%i'%k + ' of ' + '%i'%Nsteps + ' (%.3f%% done)'%(float(k)/Nsteps*100))
+        T[-1, j, next_k] = T[0, j, next_k]  # Periodic left/right boundaries
+#    sys.stdout.write('\r step ' + '%i'%k + ' of ' + '%i'%Nsteps + ' (%.3f%% done)'%(float(k)/Nsteps*100))
 
 
 fig1 = plt.figure(1, figsize=(6, 4), dpi=100)
 ax1 = fig1.add_subplot(1, 1, 1)
 x, y = np.mgrid[0:Nx, 0:Ny]
-ax1.imshow(T[:, :].T, cmap='hot')
-CS = ax1.contour(y, x, T[:, :].T)
+ax1.imshow(T[:, :, 1].T, cmap='hot')
+CS = ax1.contour(y, x, T[:, :, 1].T)
 plt.clabel(CS, inline=1, fontsize=10)
 filename = 'heatmaps/heatmap_t%s.png' % str(k).zfill(4)
 plt.savefig(filename)
