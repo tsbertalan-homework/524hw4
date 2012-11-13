@@ -17,7 +17,7 @@ print 'tmax is', tmax
 Nsteps = int(np.ceil((tmax - t0) / dt))
 print 'Nsteps is', Nsteps
 T = np.empty((Nx, Ny, Nsteps))
-print T.shape
+print 'T.shape is', T.shape
 
 #ICs:
 T[:, :, 0] = 0
@@ -36,17 +36,17 @@ for k in xrange(Nsteps-1):
                                 )
     for j in xrange(1, Ny - 1):
         T[-1, j, k + 1] = T[0, j, k + 1]
-    sys.stdout.write('step ' + '%i'%k + ' of ' + '%i'%Nsteps + '\r')
+    sys.stdout.write('step ' + '%i'%k + ' of ' + '%i'%Nsteps + ' (%.3f%% done)'%(float(k)/Nsteps*100) + '\r')
 
 
 fig1 = plt.figure(1, figsize=(6, 4), dpi=100)
 ax1 = fig1.add_subplot(1,1,1)
 numtoplot=Nsteps
-for k in xrange(numtoplot-1):
+for k in np.arange(numtoplot-1)[::100]:
     ax1.imshow(T[:,:,k])
     filename = 'heatmaps/heatmap_t%s.png' % str(k).zfill(4)
     sys.stdout.write('saving: ' + filename + ' of ' + '%i' % numtoplot + '\r')
-    sys.stdout.flush()
+#    sys.stdout.flush()  # Use this to see *every* filename as it goes by. Slows things down a little.
     plt.savefig(filename)
 #plt.show()
 
