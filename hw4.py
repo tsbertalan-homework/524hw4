@@ -1,5 +1,7 @@
 import numpy as np
-Nx = Ny = 16
+import sys
+import matplotlib.pyplot as plt
+Nx = Ny = 64
 pi = np.pi
 t0 = 0
 kappa = 0.4
@@ -34,16 +36,16 @@ for k in xrange(Nsteps-1):
                                 )
     for j in xrange(1, Ny - 1):
         T[-1, j, k + 1] = T[0, j, k + 1]
+    sys.stdout.write('step ' + '%i'%k + ' of ' + '%i'%Nsteps + '\r')
 
 
-import matplotlib.pyplot as plt
-import sys
-fig1 = plt.figure(1, figsize=(3, 2), dpi=100)
+fig1 = plt.figure(1, figsize=(6, 4), dpi=100)
 ax1 = fig1.add_subplot(1,1,1)
-for k in xrange(80-1):
+numtoplot=Nsteps
+for k in xrange(numtoplot-1):
     ax1.imshow(T[:,:,k])
     filename = 'heatmaps/heatmap_t%s.png' % str(k).zfill(4)
-    sys.stdout.write('saving: ' + filename + ' of ' + '%i' % Nsteps + '\r')
+    sys.stdout.write('saving: ' + filename + ' of ' + '%i' % numtoplot + '\r')
     sys.stdout.flush()
     plt.savefig(filename)
 #plt.show()
