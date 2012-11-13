@@ -1,7 +1,7 @@
 import numpy as np
 import sys
 import matplotlib.pyplot as plt
-Nx = Ny = 64
+Nx = Ny = 16
 pi = np.pi
 t0 = 0
 kappa = 0.4
@@ -44,12 +44,16 @@ for k in xrange(Nsteps - 1):
 fig1 = plt.figure(1, figsize=(6, 4), dpi=100)
 ax1 = fig1.add_subplot(1, 1, 1)
 numtoplot = int(np.ceil(Nsteps / 1))
+x, y = np.mgrid[0:Nx, 0:Ny]
 for k in np.arange(numtoplot - 1)[::int(np.ceil(Nsteps / 100))]:
-    ax1.imshow(T[:, :, k].T)
+    ax1.imshow(T[:, :, k].T, cmap='hot')
+    CS = ax1.contour(y, x, T[:, :, k].T)
+    plt.clabel(CS, inline=1, fontsize=10)
     filename = 'heatmaps/heatmap_t%s.png' % str(k).zfill(4)
     sys.stdout.write('\r saving: ' + filename + ' of ' + '%i' % numtoplot)
 #    sys.stdout.flush()  # Use this to see *every* filename as it goes by. Slows things down a little.
     plt.savefig(filename)
+    ax1.cla()
 #plt.show()
 
 #from mayavi.mlab import contour_surf
