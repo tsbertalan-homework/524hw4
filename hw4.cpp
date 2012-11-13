@@ -7,37 +7,6 @@
 #define SIZE 32
 
 using namespace std;
-// #include <iostream>
-// #include <math.h>
-// int main() {
-//     double checkthis[4][4];  // This makes a 4x4, zero-based array.
-//     for(int i=0; i<4; ++i) {
-//         for(int j=0; j<4; ++j) {
-//             checkthis[i][j] = pow(sin(i), 2) + pow(cos(j), 2);
-//             cout << i << "," << j << " is " << checkthis[i][j] << '\n';
-//         }
-//     }
-//     return 0;
-// }
-
- 
-// #include <iostream>
-// #include <fstream>
-// 
-// using namespace std;
-// 
-// int main(void)
-// {
-//     char a[2][10] = { "abcd", "efgh" };
-//     ofstream ofp;
-//     
-//     ofp.open("file.txt", ios::out);
-//     ofp.write((char *) a, sizeof a);
-// 
-//     ofp.close();
-//     return 0;
-// }
-
 
 int main() {
     
@@ -95,28 +64,17 @@ int main() {
         }
         cout << "\rStep " << k << " of " << Nsteps << " (" << float(k)/Nsteps*100 << "\% done).";
     }
-cout << " " << endl;
-ofstream outputFile;
-outputFile.open("output.csv", ios::out);
-// outputFile.write((char *) T, sizeof T);
-for (int i=0; i<Nx; i++) {
-    for (int j=0; j<Ny-1; j++) {
-        outputFile << T[i][j][1] << ", ";
+    
+    cout << " " << endl;
+    ofstream outputFile;
+    outputFile.open("output.csv", ios::out);
+    // outputFile.write((char *) T, sizeof T);
+    for (int i=0; i<Nx; i++) {
+        for (int j=0; j<Ny-1; j++) {
+            outputFile << T[i][j][1] << ", ";
+        }
+        outputFile << T[i][Ny-1][1];
+        outputFile << "\n";
     }
-    outputFile << T[i][Ny-1][1];
-    outputFile << "\n";
-}
-outputFile.close();
-
-//     fig1 = plt.figure(1, figsize=(6, 4), dpi=100)
-//     ax1 = fig1.add_subplot(1, 1, 1)
-//     x, y = np.mgrid[0:Nx, 0:Ny]
-//     ax1.imshow(T[:, :, 1].T, cmap='hot')
-//     CS = ax1.contour(y, x, T[:, :, 1].T)
-//     plt.clabel(CS, inline=1, fontsize=10)
-//     filename = 'heatmaps/heatmap_t%s.png' % str(k).zfill(4)
-//     plt.savefig(filename)
-//     #ax1.cla()
-//     plt.show()
-
+    outputFile.close();
 }
