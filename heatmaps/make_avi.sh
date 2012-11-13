@@ -7,7 +7,7 @@ else
     cd heatmaps
 fi
 mencoder 'mf://heatmap_t*.png' -mf type=png:fps=10 -ovc lavc -oac copy -o animation.avi
-avconv -y -i animation.avi animation.mp4 
+avconv -y -i animation.avi animation.mp4
 rm animation.avi
-rm heatmap_t*.png
+#rm heatmap_t*.png
 cd $startdir
