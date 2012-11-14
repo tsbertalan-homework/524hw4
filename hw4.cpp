@@ -4,7 +4,7 @@
 #include <iostream>
 #include <fstream>
 
-#define SIZE 64
+#define SIZE 256
 
 using namespace std;
 
@@ -16,7 +16,7 @@ int main() {
     float t0 = 0;
     float kappa = 0.4;
     float tmax = 0.5 * pow(pi, 2) / kappa;
-//     cout << "tmax is " << tmax << endl;
+     cout << "tmax is " << tmax << endl;
     float x0 = 0;
     float y0 = x0;
     float xmax = pi;
@@ -30,6 +30,7 @@ int main() {
 //     Nsteps = 10;
 //     cout << "Nsteps is " << Nsteps << endl;
     float T[Nx][Ny][2];
+    cout << "sizeof(T) is: " << sizeof(T) << endl;
 
     // Initially, zero everywhere ...
     for (int i=0; i<Nx; i++) {
@@ -50,6 +51,7 @@ int main() {
     for (int k=0; k<Nsteps; k++) {
         int next_k = k%2;  // use this to decide whether which is the 'current' work array...
         int this_k = (k+1)%2; // ...and which is the 'next' work array
+        cout << "\rStep " << k << " of " << Nsteps << " (" << float(k)/Nsteps*100 << "\% done).";
         #pragma omp parallel for
         for (int i=0; i<Nx-1; i++) { // from 1 to Nx-1 because the periodic areas will be handled later
             for (int j=1; j<Ny-1; j++) { // from 1 to Ny-1 because top and bottom boundaries shouldn't change.
@@ -68,7 +70,6 @@ int main() {
                                     ); // left edge
             T[Nx-1][j][next_k] = T[0][j][next_k];  // right edge - periodic (equals left edge)
         }
-        cout << "\rStep " << k << " of " << Nsteps << " (" << float(k)/Nsteps*100 << "\% done).";
     }
     
     cout << " " << endl;
