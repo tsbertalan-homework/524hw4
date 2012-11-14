@@ -20,7 +20,7 @@ for size in sizes:
     size_indices.append(list(T[:, sizecol]).index(size))
 fig1 = plt.figure(1, figsize=(6, 4), dpi=100)
 ax1 = fig1.add_subplot(1, 1, 1)
-colors = ['red', 'blue', 'green', 'yellow']
+colors = ['red', 'blue', 'green', 'yellow', 'orange', 'cyan', 'magenta', 'black']
 for i in range(len(size_indices)):
     if i == len(size_indices)-1:
         final = T.shape[0]
