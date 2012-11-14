@@ -1,13 +1,12 @@
 CFLAGS  = -g #-Wall -Pedantic
-CXX = g++
 
 all: serial omp mpi
 
 serial:
-	${CXX} -o hw4.exe hw4.cpp
+	g++ ${CFLAGS} -o hw4-serial.exe hw4.cc
 omp:
-	${CXX} -fopenmp -o hw4-OpenMP.exe hw4.cc
+	g++ -fopenmp ${CFLAGS} -o hw4-OpenMP.exe hw4.cc
 mpi:
-	mpic++ -g -o hw4-mpi.exe hw4-mpi.cc -lm
+	mpic++ ${CFLAGS} -o hw4-mpi.exe hw4-mpi.cc -lm
 clean:
-	rm -f hw4.o hw4.exe hw4-OpenMP.exe
+	rm -f hw4.o hw4-serial.exe hw4-OpenMP.exe hw4-OpenMP.exe
