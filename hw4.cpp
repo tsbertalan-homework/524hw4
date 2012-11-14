@@ -4,7 +4,7 @@
 #include <iostream>
 #include <fstream>
 
-#define SIZE 44
+#define SIZE 64
 
 using namespace std;
 
@@ -50,7 +50,7 @@ int main() {
     for (int k=0; k<Nsteps; k++) {
         int next_k = k%2;  // use this to decide whether which is the 'current' work array...
         int this_k = (k+1)%2; // ...and which is the 'next' work array
-        for (int i=0; i<Nx-1; i++) { // from 0 to Nx-1 because the last column will be wrapped from the first.
+        for (int i=0; i<Nx-1; i++) { // from 1 to Nx-1 because the periodic areas will be handled later
             for (int j=1; j<Ny-1; j++) { // from 1 to Ny-1 because top and bottom boundaries shouldn't change.
                 T[i][ j][next_k] = T[i][j][this_k] + dt * kappa / dx / dy * (
                                         + T[i - 1][j][this_k] + T[i + 1][j][this_k]
@@ -60,8 +60,12 @@ int main() {
             }
         }
         for (int j=0; j<Ny; j++) {
-            T[0][j][next_k] = 0;
-            T[Nx-1][j][next_k] = T[0][j][next_k];  // Periodic left/right boundaries
+            T[0][j][next_k] = T[0][j][this_k] + dt * kappa / dx / dy * (
+                                        + T[Nx - 1][j][this_k] + T[1][j][this_k]
+                                        + T[0][j - 1][this_k] + T[0][j + 1][this_k]
+                                        - 4 * T[0][j][this_k]
+                                    ); // left edge
+            T[Nx-1][j][next_k] = T[0][j][next_k];  // right edge - periodic (equals left edge)
         }
         cout << "\rStep " << k << " of " << Nsteps << " (" << float(k)/Nsteps*100 << "\% done).";
     }
