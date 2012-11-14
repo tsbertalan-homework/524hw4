@@ -2,8 +2,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define SIZE 100
-
-int main(int argc, char** argv) {
+int main(int argc, char *argv[]) {
+    int Nx, Ny;
+    if(argc != 2) {
+        Nx = 32;
+    } else {
+        Nx = atoi( argv[1] );
+    }
+    Ny = Nx;
     MPI_Init(NULL, NULL);
     int world_rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
@@ -23,16 +29,21 @@ int main(int argc, char** argv) {
     if(world_rank==world_size-1){
         right_rank = 0;
     }
+    if(world_rank==0){
+        printf("Nx, Ny is %d, %d\n", Nx, Ny);
+    }
+    MPI_Barrier(MPI_COMM_WORLD);
     
-    int Nx = SIZE;
-    int Ny = SIZE;
+//     int Nx = SIZE;
+//     int Ny = SIZE;
     int Nx_local = Nx / world_size;
     
-    float **local_data;
-    local_data = (float **)malloc((Nx_local+2) * sizeof(float *));
-    for(int i=0; i<Nx_local+2; i++){
-        local_data[i] = (float *)malloc(Ny * sizeof(float));
-    }
+//     float **local_data;
+//     local_data = (float **)malloc((Nx_local+2) * sizeof(float *));
+//     for(int i=0; i<Nx_local+2; i++){
+//         local_data[i] = (float *)malloc(Ny * sizeof(float));
+//     }
+    float local_data[Nx_local+2][Ny];
     
     float left_edge[Ny];
     float right_edge[Ny];
@@ -70,27 +81,29 @@ int main(int argc, char** argv) {
     printf("done saving in %d\n", world_rank);
     
     MPI_Barrier(MPI_COMM_WORLD);
-    MPI_Send(&(local_data[0][0]), Ny*(Nx_local+2), MPI_FLOAT, 0, world_rank, MPI_COMM_WORLD);
+    MPI_Send(&local_data, Ny*(Nx_local+2), MPI_FLOAT, 0, world_rank, MPI_COMM_WORLD);
     if(world_rank==0){
         printf("gathering...\n");
-        float **received_data;
-        received_data = (float **)malloc((Nx_local+2) * sizeof(float *));
-        for(int i=0; i<Nx_local+2; i++){
-            received_data[i] = (float *)malloc(Ny * sizeof(float));
-        }
+//         float **received_data;
+//         received_data = (float **)malloc((Nx_local+2) * sizeof(float *));
+//         for(int i=0; i<Nx_local+2; i++){
+//             received_data[i] = (float *)malloc(Ny * sizeof(float));
+//         }
+        float received_data[Nx_local+2][Ny];
         for(int i=0; i<world_size; i++){
-            MPI_Recv(&(received_data[0][0]), Ny*(Nx_local*2), MPI_FLOAT, i, i, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            MPI_Recv(&received_data, Ny*(Nx_local*2), MPI_FLOAT, i, i, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            printf("a middlish value for i=%d is %f\n", i, received_data[3][4]);
         }
-        for(int i=0; i<Nx_local+2; i++){
-            free(received_data[i]);
-        }
-        free(received_data);
+//         for(int i=0; i<Nx_local+2; i++){
+//             free(received_data[i]);
+//         }
+//         free(received_data);
     }
     MPI_Barrier(MPI_COMM_WORLD);
-    for(int i=0; i<Nx_local+2; i++){
-        free(local_data[i]);
-    }
-    free(local_data);
+//     for(int i=0; i<Nx_local+2; i++){
+//         free(local_data[i]);
+//     }
+//     free(local_data);
     MPI_Finalize();
     return 0;
 }
