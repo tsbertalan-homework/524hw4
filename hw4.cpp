@@ -3,8 +3,9 @@
 #include <cmath>
 #include <iostream>
 #include <fstream>
+// #include <mpi.h>
 
-#define SIZE 256
+#define SIZE 96
 
 using namespace std;
 
@@ -16,19 +17,14 @@ int main() {
     float t0 = 0;
     float kappa = 0.4;
     float tmax = 0.5 * pow(pi, 2) / kappa;
-     cout << "tmax is " << tmax << endl;
     float x0 = 0;
     float y0 = x0;
     float xmax = pi;
     float ymax = xmax;
     float dx = (xmax - x0) / Nx;
     float dy = (ymax - y0) / Ny;
-//     cout << "dx is " << dx << endl;
     float dt = dx * dy / 4 / kappa;
-//     cout << "dt is " << dt << endl;
     int Nsteps = std::ceil((tmax - t0) / dt);
-//     Nsteps = 10;
-//     cout << "Nsteps is " << Nsteps << endl;
     float T[Nx][Ny][2];
     cout << "sizeof(T) is: " << sizeof(T) << endl;
 
@@ -51,7 +47,7 @@ int main() {
     for (int k=0; k<Nsteps; k++) {
         int next_k = k%2;  // use this to decide whether which is the 'current' work array...
         int this_k = (k+1)%2; // ...and which is the 'next' work array
-//        cout << "\rStep " << k << " of " << Nsteps << " (" << float(k)/Nsteps*100 << "\% done).";
+        cout << "\rStep " << k << " of " << Nsteps << " (" << float(k)/Nsteps*100 << "\% done).";
         #pragma omp parallel for
         for (int i=0; i<Nx-1; i++) { // from 1 to Nx-1 because the periodic areas will be handled later
             for (int j=1; j<Ny-1; j++) { // from 1 to Ny-1 because top and bottom boundaries shouldn't change.
