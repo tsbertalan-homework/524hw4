@@ -153,16 +153,31 @@ int main(int argc, char *argv[]) {
             }
         }
 
+        float sum = 0;
         ofstream outputFile;
         outputFile.open("output.csv", ios::out);
         for (int j=0; j<Ny; j++) {
             for (int i=0; i<Nx-1; i++) {
                 outputFile << final_T[i][j] << ", ";
+                sum += final_T[i][j];
             }
             outputFile << final_T[Nx-1][j];
+            sum += final_T[Nx-1][j];
             outputFile << endl;
         }
         outputFile.close();
+        
+        cout << "sum is " << sum << endl;
+        float mean = sum / Ny / Nx;
+        cout << "mean is " << mean << endl;
+        
+        ofstream statsFile;
+        char buffer [50];
+        int stats_filename = sprintf(buffer, "stats%dx%d.txt", Nx, Ny);
+        statsFile.open(buffer, ios::out);
+        statsFile << "sum=" << sum << endl;
+        statsFile << "mean=" << mean << endl;
+        statsFile.close();
     }
     MPI_Barrier(MPI_COMM_WORLD);  // allow file activity on the master node to complete before finalizing. I'm not sure if this is actually important.
     MPI_Finalize();
