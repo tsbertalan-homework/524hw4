@@ -8,6 +8,6 @@ serial:
 omp:
 	${CXX} -fopenmp -o hw4-OpenMP.exe hw4.cpp
 mpi:
-	mpicc -g -std=c99 -o hw4-mpi.exe hw4-mpi.c
+	mpicc -g -std=c99 -o hw4-mpi.exe hw4-mpi.c -lm
 clean:
 	rm -f hw4.o hw4.exe hw4-OpenMP.exe

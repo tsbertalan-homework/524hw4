@@ -1,7 +1,21 @@
 #include <mpi.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
+
 #define SIZE 100
+
+int getGlobalXCoord(const int i, const int world_rank, const int Nx_local, const int world_size){
+    int global_i = i-1+Nx_local*world_rank;
+    if (global_i==-1){
+        global_i = Nx_local*world_size - 1;
+    }
+    if (global_i==Nx_local*world_size){
+        global_i = 0;
+    }
+    return global_i;
+}
+
 int main(int argc, char *argv[]) {
     int Nx, Ny;
     if(argc != 2) {
@@ -13,11 +27,12 @@ int main(int argc, char *argv[]) {
     MPI_Init(NULL, NULL);
     int world_rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
+    printf("check print; rank %d\n", world_rank);
     int world_size;
     MPI_Comm_size(MPI_COMM_WORLD, &world_size);
     
     if (SIZE%world_size != 0) {
-        fprintf(stderr, "World size must be an even divisor of %d for %s\n", SIZE, argv[0]);
+        fprintf(stderr, "World size must be an even divisor of %d for %s\n", Nx, argv[0]);
         MPI_Abort(MPI_COMM_WORLD, 1); 
     }
 
@@ -29,10 +44,6 @@ int main(int argc, char *argv[]) {
     if(world_rank==world_size-1){
         right_rank = 0;
     }
-    if(world_rank==0){
-        printf("Nx, Ny is %d, %d\n", Nx, Ny);
-    }
-    MPI_Barrier(MPI_COMM_WORLD);
     
 //     int Nx = SIZE;
 //     int Ny = SIZE;
@@ -47,11 +58,15 @@ int main(int argc, char *argv[]) {
     
     float left_edge[Ny];
     float right_edge[Ny];
-    for(int i=1; i<Nx_local-1; i++){
+    for(int i=1; i<Nx_local+1; i++){
         for(int j=0; j<Ny; j++){
-            local_data[i][j] = (float) world_rank;
-
+            local_data[i][j] = 0.0;
         }
+    }
+    
+    for(int i=0; i<Nx_local+2; i++){
+        local_data[i][0] = pow(cos(getGlobalXCoord(i,world_rank,Nx_local,world_size)), 2);
+        local_data[i][Ny-1] = pow(sin(getGlobalXCoord(i,world_rank,Nx_local,world_size)), 2);
     }
     for(int j=0; j<Ny; j++){
         left_edge[j] = local_data[1][j];
@@ -59,6 +74,7 @@ int main(int argc, char *argv[]) {
     for(int j=0; j<Ny; j++){
         right_edge[j] = local_data[Nx_local-2][j];
     }
+    MPI_Barrier(MPI_COMM_WORLD);  // wait until all nodes have done their initial setup
 //     printf("%d sending to %d\n", world_rank, left_rank);
     MPI_Send(&left_edge,  Ny, MPI_FLOAT, left_rank,  0, MPI_COMM_WORLD);
 //     printf("%d sent to %d\n", world_rank, left_rank);
