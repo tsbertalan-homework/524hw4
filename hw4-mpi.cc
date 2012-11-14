@@ -72,12 +72,12 @@ int main(int argc, char *argv[]) {
     float outer_left_edge[Ny];  // holds left neighbor's boundary, after we receive it
     float outer_right_edge[Ny];
     
-    if (world_rank==0){
-        cout << "(Nx, Nx_local, Ny) = (" << Nx<<','<<Nx_local<<','<<Ny << ')' << endl;
-        cout << "T has shape (" << local_xwidth <<','<< Ny <<','<< 2 << ')' << endl;
-        cout << "(imin, imax) = (" << imin << ',' << imax << ')' << endl;
-        cout << "(guardleft, guardright) = (" << guardleft << ',' << guardright << ')' << endl;
-    }
+//     if (world_rank==0){
+//         cout << "(Nx, Nx_local, Ny) = (" << Nx<<','<<Nx_local<<','<<Ny << ')' << endl;
+//         cout << "T has shape (" << local_xwidth <<','<< Ny <<','<< 2 << ')' << endl;
+//         cout << "(imin, imax) = (" << imin << ',' << imax << ')' << endl;
+//         cout << "(guardleft, guardright) = (" << guardleft << ',' << guardright << ')' << endl;
+//     }
     
     // Initialize local arrays
     for(int i=guardleft; i<=guardright; i++){
