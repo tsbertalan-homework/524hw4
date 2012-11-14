@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <cmath>
+
 
 #define SIZE 100
 
@@ -54,6 +56,17 @@ int main(int argc, char *argv[]) {
 //     for(int i=0; i<Nx_local+2; i++){
 //         local_data[i] = (float *)malloc(Ny * sizeof(float));
 //     }
+    float pi = 3.14159;
+    float t0 = 0;
+    float kappa = 0.4;
+    float tmax = 0.5 * pow(pi, 2) / kappa;
+    float x0 = 0;
+    float y0 = x0;
+    float xmax = pi;
+    float ymax = xmax;
+    float dx = (xmax - x0) / Nx;
+    float dy = (ymax - y0) / Ny;
+    float dt = dx * dy / 4 / kappa;
     int Nsteps = std::ceil((tmax - t0) / dt);
     float local_data[Nx_local+2][Ny];
     
@@ -96,7 +109,7 @@ int main(int argc, char *argv[]) {
         for(int j=0; j<Ny; j++){
             local_data[Nx_local-2][j] = outer_right_edge[j];
         }
-        printf("done saving in %d\n", world_rank);
+//         printf("done saving in %d\n", world_rank);
     }
     MPI_Barrier(MPI_COMM_WORLD);
     MPI_Send(&local_data, Ny*(Nx_local+2), MPI_FLOAT, 0, world_rank, MPI_COMM_WORLD);
