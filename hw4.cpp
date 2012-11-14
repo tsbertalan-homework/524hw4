@@ -3,16 +3,21 @@
 #include <cmath>
 #include <iostream>
 #include <fstream>
+#include<stdlib.h>
 // #include <mpi.h>
 
 #define SIZE 96
 
 using namespace std;
 
-int main() {
-    
-    int Nx = SIZE;
-    int Ny = Nx;
+int main(int argc, char *argv[]) {
+    int Nx, Ny;
+    if(argc != 2) {
+        Nx = 32;
+    } else {
+        Nx = atoi( argv[1] );
+    }
+    Ny = Nx;
     float pi = 3.14159;
     float t0 = 0;
     float kappa = 0.4;
