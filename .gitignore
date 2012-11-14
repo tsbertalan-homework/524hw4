@@ -35,4 +35,22 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
->>>>>>> 2b2a3b52fd23fe0f451e5256880551b9d16285a1
+
+
+__init__.py
+blocking_mpi.c
+*.swp
+Makefile.hello-mpi
+a.out
+arraycheck.cpp
+cc.gif
+cc2.gif
+contour_demo.py
+heateqn.pdf
+hello-mpi-mpirun.sh
+hello-mpi.c
+*.exe
+*.o
+mpi2.pdf
+*.csv
+
