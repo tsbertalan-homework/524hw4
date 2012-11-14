@@ -36,10 +36,7 @@ int main(int argc, char *argv[]) {
     int imin = 1;
     int imax = Nx_local;
     int guardleft = 0;
-    int guardright = Nx_local+1;
-    if (world_rank==0){
-        cout << "(Nx, Nx_local, Ny) = (" << Nx<<','<<Nx_local<<','<<Ny << ')' << endl;
-    }
+    int guardright = Nx_local + 1;
     
     if (Nx%world_size != 0) {
         fprintf(stderr, "World size must be an even divisor of %d for %s\n", Nx, argv[0]);
@@ -75,6 +72,13 @@ int main(int argc, char *argv[]) {
     float outer_left_edge[Ny];  // holds left neighbor's boundary, after we receive it
     float outer_right_edge[Ny];
     
+    if (world_rank==0){
+        cout << "(Nx, Nx_local, Ny) = (" << Nx<<','<<Nx_local<<','<<Ny << ')' << endl;
+        cout << "T has shape (" << local_xwidth <<','<< Ny <<','<< 2 << ')' << endl;
+        cout << "(imin, imax) = (" << imin << ',' << imax << ')' << endl;
+        cout << "(guardleft, guardright) = (" << guardleft << ',' << guardright << ')' << endl;
+    }
+    
     // Initialize local arrays
     for(int i=guardleft; i<=guardright; i++){
         for(int j=0; j<Ny; j++){
@@ -108,22 +112,19 @@ int main(int argc, char *argv[]) {
         }
         
         MPI_Barrier(MPI_COMM_WORLD);
-//         cout << world_rank << ": a middlish T value is " << T[1][2][this_k] << endl;
-//         cout << world_rank << ": a middlish s value is " << inner_left_edge[2] << endl;
-        MPI_Send(&inner_left_edge,  Ny, MPI_FLOAT, left_rank,  0, MPI_COMM_WORLD);
-        MPI_Send(&inner_right_edge, Ny, MPI_FLOAT, right_rank, 0, MPI_COMM_WORLD);
-        MPI_Recv(&outer_left_edge,  Ny, MPI_FLOAT, left_rank,  0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        MPI_Recv(&outer_right_edge, Ny, MPI_FLOAT, right_rank, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-//         cout << world_rank << ": a middlish r value is " << outer_left_edge[2] << endl;
-        
+        MPI_Send(&inner_left_edge,  Ny, MPI_FLOAT, left_rank,  world_rank, MPI_COMM_WORLD);
+        MPI_Send(&inner_right_edge, Ny, MPI_FLOAT, right_rank, world_rank, MPI_COMM_WORLD);
+        MPI_Recv(&outer_left_edge,  Ny, MPI_FLOAT, left_rank,  left_rank, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        MPI_Recv(&outer_right_edge, Ny, MPI_FLOAT, right_rank, right_rank, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
         // put the received data into the extreme left and right edges of our local array
-//         cout << "saving left edge" << endl;
         for(int j=0; j<Ny; j++){
             T[guardleft][j][this_k] = outer_left_edge[j];
         }
         for(int j=0; j<Ny; j++){
             T[guardright][j][this_k] = outer_right_edge[j];
         }
+//         cout << "getting " << outer_right_edge[3] << " from " << left_rank << endl;
         
         // now that we have both (overlap) borders, we can do math with it
         for (int i=imin; i<=imax; i++) { // don't update the borders ("guard cells")
@@ -133,59 +134,37 @@ int main(int argc, char *argv[]) {
                                         + T[i][j - 1][this_k] + T[i][j + 1][this_k]
                                         - 4 * T[i][j][this_k]
                                     );
-//                 cout << world_rank << ": a middlish value at (" <<i<<','<<j<< ") is " << T[i][j][next_k] << endl;
             }
         }
     }
     MPI_Barrier(MPI_COMM_WORLD);
     MPI_Send(&T, Ny*(local_xwidth)*2, MPI_FLOAT, 0, world_rank, MPI_COMM_WORLD);
     if(world_rank==0){
-        printf("gathering...\n");
-//         float **gathered_slice;
-//         gathered_slice = (float **)malloc((local_xwidth) * sizeof(float *));
-//         for(int i=0; i<local_xwidth; i++){
-//             gathered_slice[i] = (float *)malloc(Ny * sizeof(float));
-//         }
         float final_T[Nx][Ny];
         float gathered_slice[local_xwidth][Ny][2];
         int global_i;
         for(int rank=0; rank<world_size; rank++){
             MPI_Recv(&gathered_slice, Ny*(local_xwidth)*2, MPI_FLOAT, rank, rank, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-            printf("a middlish value for i=%d is %f\n", rank, gathered_slice[2][2][1]);
             for(int i=imin; i<=imax; i++){
-                global_i = getGlobalXCoord(0, rank, Nx_local, world_size);
+                global_i = getGlobalXCoord(i, rank, Nx_local, world_size);
                 for(int j=0; j<Ny; j++){
-                    final_T[global_i][j] = gathered_slice[i][j][1];
+                    final_T[global_i][j] = gathered_slice[i][j][0];
                 }
             }
         }
-//         for(int i=0; i<Nx; i++){
-//             cout << "row" <<i<< '\n';
-//             for(int j=0; j<Ny; j++){
-//                 cout << final_T[i][j] << ' ';
-//             }
-//             cout << "\n\n";
-//         }
-//         for(int i=0; i<local_xwidth; i++){
-//             free(gathered_slice[i]);
-//         }
-//         free(gathered_slice);
+
         ofstream outputFile;
         outputFile.open("output.csv", ios::out);
-        for (int i=0; i<Nx; i++) {
-            for (int j=0; j<Ny-1; j++) {
+        for (int j=0; j<Ny; j++) {
+            for (int i=0; i<Nx-1; i++) {
                 outputFile << final_T[i][j] << ", ";
             }
-            outputFile << final_T[i][Ny-1];
+            outputFile << final_T[Nx-1][j];
             outputFile << endl;
         }
         outputFile.close();
     }
-    MPI_Barrier(MPI_COMM_WORLD);
-//     for(int i=0; i<local_xwidth; i++){
-//         free(T[i]);
-//     }
-//     free(T);
+    MPI_Barrier(MPI_COMM_WORLD);  // allow file activity on the master node to complete before finalizing. I'm not sure if this is actually important.
     MPI_Finalize();
     return 0;
 }
