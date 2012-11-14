@@ -44,8 +44,8 @@ int main(int argc, char *argv[]) {
     // Except for the top and bottom rows.
     for (int i=0; i<Nx; i++) {
         for (int k=0; k<2; k++) {
-            T[i][  0 ][k] = pow(sin(i * dx), 2);
-            T[i][Ny-1][k] = pow(cos(i * dx), 2);
+            T[i][  0 ][k] = pow(cos(i * dx), 2);
+            T[i][Ny-1][k] = pow(sin(i * dx), 2);
         }
     }
 
