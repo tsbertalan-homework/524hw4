@@ -21,10 +21,9 @@ int getGlobalXCoord(const int i, const int world_rank, const int Nx_local, const
 }
 
 int main(int argc, char *argv[]) {
-    if(world_rank==0){
-        timeval a;
-        gettimeofday(&a, 0);
-    }
+    timeval a;
+    gettimeofday(&a, 0);
+    
     int Nx, Ny;
     if(argc != 2) {
         Nx = 32;
@@ -158,7 +157,7 @@ int main(int argc, char *argv[]) {
                 }
             }
         }
-
+        cout << endl;
         float sum = 0;
         ofstream outputFile;
         outputFile.open("output.csv", ios::out);
