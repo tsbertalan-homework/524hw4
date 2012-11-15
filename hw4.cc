@@ -4,6 +4,7 @@
 #include <fstream>
 #include <stdlib.h>
 #include "elapsed.h"
+#include "saveStats.h"
 
 #define SIZE 96
 
@@ -89,12 +90,11 @@ int main(int argc, char *argv[]) {
         outputFile << endl;
     }
     outputFile.close();
-    cout << "mean is " << sum / Ny / Nx << endl;
-    
+
     timeval b;
     gettimeofday(&b, 0);
-    cout << "elapsed time: " << elapsed(a, b) << endl;
-//     for (int i=0; i<Nx; i++) {
-//         cout << T[i][8][1] << endl;
-//     }
+    double elapsed_time = elapsed(a, b);
+    int world_size = 1;
+    saveStats(elapsed_time, sum, Nx, Ny, world_size, "nonmpi");
+    cout << "elapsed time: " << elapsed_time << endl;
 }

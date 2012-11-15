@@ -5,6 +5,7 @@
 #include <cmath>
 #include <fstream>
 #include "elapsed.h"
+#include "saveStats.h"
 
 #define SIZE 100
 using namespace std;
@@ -144,6 +145,7 @@ int main(int argc, char *argv[]) {
     }
     MPI_Barrier(MPI_COMM_WORLD);
     MPI_Send(&T, Ny*(local_xwidth)*2, MPI_FLOAT, 0, world_rank, MPI_COMM_WORLD);
+    double sum = 0;
     if(world_rank==0){
         float final_T[Nx][Ny];
         float gathered_slice[local_xwidth][Ny][2];
@@ -158,7 +160,6 @@ int main(int argc, char *argv[]) {
             }
         }
         cout << endl;
-        float sum = 0;
         ofstream outputFile;
         outputFile.open("output.csv", ios::out);
         for (int j=0; j<Ny; j++) {
@@ -172,23 +173,14 @@ int main(int argc, char *argv[]) {
         }
         outputFile.close();
         
-        cout << "sum is " << sum << endl;
-        float mean = sum / Ny / Nx;
-        cout << "mean is " << mean << endl;
-        
-        ofstream statsFile;
-        char buffer [50];
-        int stats_filename = sprintf(buffer, "stats%dx%d-%dprocs.txt", Nx, Ny, world_size);
-        statsFile.open(buffer, ios::out);
-        statsFile << "sum=" << sum << endl;
-        statsFile << "mean=" << mean << endl;
-        statsFile.close();
     }
     MPI_Barrier(MPI_COMM_WORLD);  // allow file activity on the master node to complete before finalizing. I'm not sure if this is actually important.
     if(world_rank==0){
         timeval b;
         gettimeofday(&b, 0);
-        cout << "elapsed time: " << elapsed(a, b) << endl;
+        double elapsed_time = elapsed(a, b);
+        saveStats(elapsed_time, sum, Nx, Ny, world_size, "mpi");
+        cout << "elapsed time: " << elapsed_time << endl;
     }
     MPI_Finalize();
     return 0;
