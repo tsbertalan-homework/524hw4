@@ -2,7 +2,6 @@
 #
 #PBS -l nodes=2:ppn=8
 #PBS -l walltime=00:30:00
-#PBS -N "HW_4-1proc-allNx"
 #PBS -m abe
 #PBS -M bertalan@princeton.edu
 #
