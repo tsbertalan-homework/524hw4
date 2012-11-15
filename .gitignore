@@ -69,3 +69,5 @@ hw4_output_bak
 *.err
 *.out
 collect_outputs.sh
+heat_serial_O*
+opt_test.sh
