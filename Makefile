@@ -4,7 +4,7 @@ FUNCTIONS=elapsed.cc saveStats.cc
 all: serial omp mpi
 
 
-opt-test: serial serial-opt1 serial-opt2 serial-opt3
+opt-test: serial-nonopt serial-opt1 serial-opt2 serial-opt3
 serial-nonopt:
 	g++ ${CFLAGS} -o heat_serial_O0 heat_serial.cc ${FUNCTIONS}
 serial-opt1:
