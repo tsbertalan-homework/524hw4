@@ -15,7 +15,9 @@ int main(int argc, char *argv[]) {
     gettimeofday(&a, 0);
     int Nx, Ny;
     if(argc != 2) {
-        Nx = 32;
+        cerr << "USAGE: " << argv[0] << " <nx>" << endl;
+        int WRONG_ARGS = 65;
+        exit(WRONG_ARGS);
     } else {
         Nx = atoi( argv[1] );
     }
@@ -55,7 +57,6 @@ int main(int argc, char *argv[]) {
         int next_k = k%2;  // use this to decide whether which is the 'current' work array...
         int this_k = (k+1)%2; // ...and which is the 'next' work array
         cout << "\rStep " << k << " of " << Nsteps << " (" << float(k)/Nsteps*100 << "\% done).";
-        #pragma omp parallel for
         for (int i=0; i<Nx-1; i++) { // from 1 to Nx-1 because the periodic areas will be handled later
             for (int j=1; j<Ny-1; j++) { // from 1 to Ny-1 because top and bottom boundaries shouldn't change.
                 T[i][ j][next_k] = T[i][j][this_k] + dt * kappa / dx / dy * (
@@ -95,6 +96,6 @@ int main(int argc, char *argv[]) {
     gettimeofday(&b, 0);
     double elapsed_time = elapsed(a, b);
     int world_size = 1;
-    saveStats(elapsed_time, sum, Nx, Ny, world_size, "nonmpi");
+    saveStats(elapsed_time, sum, Nx, Ny, world_size, "serial");
     cout << "elapsed time: " << elapsed_time << endl;
 }

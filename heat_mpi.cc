@@ -24,19 +24,25 @@ int getGlobalXCoord(const int i, const int world_rank, const int Nx_local, const
 int main(int argc, char *argv[]) {
     timeval a;
     gettimeofday(&a, 0);
-    
-    int Nx, Ny;
-    if(argc != 2) {
-        Nx = 32;
-    } else {
-        Nx = atoi( argv[1] );
-    }
-    Ny = Nx;
     MPI_Init(NULL, NULL);
     int world_rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
     int world_size;
     MPI_Comm_size(MPI_COMM_WORLD, &world_size);
+
+    int Nx, Ny;
+    if(argc != 2) {
+        if(world_rank==0){
+            cerr << "USAGE: " << argv[0] << " <nx>" << endl;
+        }
+        int WRONG_ARGS = 65;
+        MPI_Barrier(MPI_COMM_WORLD);  // give the master time to complain before everyone exits
+        MPI_Finalize();
+        exit(WRONG_ARGS);
+    } else {
+        Nx = atoi( argv[1] );
+    }
+    Ny = Nx;
     int Nx_local = Nx / world_size;
     int local_xwidth = Nx_local + 2;
     int imin = 1;
@@ -45,8 +51,11 @@ int main(int argc, char *argv[]) {
     int guardright = Nx_local + 1;
     
     if (Nx%world_size != 0) {
-        fprintf(stderr, "World size must be an even divisor of %d for %s\n", Nx, argv[0]);
-        MPI_Abort(MPI_COMM_WORLD, 1); 
+        if(world_rank==0){
+            cerr << "World size (user gave " << world_size << ") must be an even divisor of nx (user gave " << Nx <<") for " << argv[0] << endl;
+        }
+        MPI_Finalize();
+        exit(1);
     }
 
     // Decide on neighbors' ids, considering whether this is the first or last node.
