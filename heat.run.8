@@ -1,0 +1,13 @@
+#!/bin/bash
+#
+#PBS -l nodes=1:ppn=8
+#PBS -l walltime=00:44:00
+#PBS -N "HW_4-1proc-allNx"
+#PBS -m abe
+#PBS -M bertalan@princeton.edu
+#
+nthreads="8"
+
+module load openmpi
+cd /home/bertalan/524hw4
+sh hw4-all_tests.sh $nthreads
