@@ -61,3 +61,11 @@ mpidir
 crap
 ompdir
 serialdir
+heat_mpi
+heat_serial
+heat_omp
+hw4_output_bak
+*.txt
+*.err
+*.out
+collect_outputs.sh
