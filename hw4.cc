@@ -2,7 +2,7 @@
 #include <cmath>
 #include <iostream>
 #include <fstream>
-#include<stdlib.h>
+#include <stdlib.h>
 #include "elapsed.h"
 
 #define SIZE 96
@@ -74,18 +74,22 @@ int main(int argc, char *argv[]) {
         }
     }
     
-    cout << " " << endl;
+    cout << endl;
+    float sum = 0;
     ofstream outputFile;
     outputFile.open("output.csv", ios::out);
     // outputFile.write((char *) T, sizeof T);
     for (int i=0; i<Nx; i++) {
         for (int j=0; j<Ny-1; j++) {
             outputFile << T[i][j][1] << ", ";
+            sum += T[i][j][1];
         }
         outputFile << T[i][Ny-1][1];
+        sum += T[i][Ny-1][1];
         outputFile << endl;
     }
     outputFile.close();
+    cout << "mean is " << sum / Ny / Nx << endl;
     
     timeval b;
     gettimeofday(&b, 0);
