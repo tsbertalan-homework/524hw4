@@ -113,7 +113,7 @@ int main(int argc, char *argv[]) {
             inner_right_edge[j] = T[imax][j][this_k];
         }
         if(world_rank==0){
-            cout << "\rStep " << k << " of " << Nsteps << " (" << float(k)/Nsteps*100 << "\% done).";
+            cout << "\rStep " << k << " of " << Nsteps << " (" << float(k)/Nsteps*100 << "% done).";
         }
         
         MPI_Barrier(MPI_COMM_WORLD);
