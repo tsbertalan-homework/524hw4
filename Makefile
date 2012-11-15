@@ -6,7 +6,7 @@ all: serial omp mpi
 
 opt-test: serial serial-opt1 serial-opt2 serial-opt3
 serial-nonopt:
-	g++ ${CFLAGS} -o heat_serial heat_serial.cc ${FUNCTIONS}
+	g++ ${CFLAGS} -o heat_serial_O0 heat_serial.cc ${FUNCTIONS}
 serial-opt1:
 	g++ -O1 ${CFLAGS} -o heat_serial_O1 heat_serial.cc ${FUNCTIONS}
 serial-opt2:
