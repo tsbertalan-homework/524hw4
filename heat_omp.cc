@@ -37,7 +37,6 @@ int main(int argc, char *argv[]) {
     float dt = dx * dy / 4 / kappa;
     int Nsteps = (int)std::ceil((tmax - t0) / dt);
     float T[Nx][Ny][2];
-    cout << "sizeof(T) is: " << sizeof(T) << endl;
 
     // Initially, zero everywhere ...
     for (int i=0; i<Nx; i++) {
@@ -54,11 +53,16 @@ int main(int argc, char *argv[]) {
             T[i][Ny-1][k] = pow(sin(i * dx), 2);
         }
     }
-
+    int show_progress = 0;
+    if(getenv("HEAT_PROGRESS")!=NULL){
+        show_progress = atoi(getenv("HEAT_PROGRESS"));
+    }
     for (int k=0; k<Nsteps; k++) {
         int next_k = k%2;  // use this to decide whether which is the 'current' work array...
         int this_k = (k+1)%2; // ...and which is the 'next' work array
-        cout << "\rStep " << k << " of " << Nsteps << " (" << float(k)/Nsteps*100 << "\% done).";
+        if(show_progress){
+            cout << "\rStep " << k << " of " << Nsteps-1 << " (" << float(k)/(Nsteps-1)*100 << "% done).        ";
+        }
         #pragma omp parallel for num_threads (Nprocs)
         for (int i=0; i<Nx-1; i++) { // from 1 to Nx-1 because the periodic areas will be handled later
             for (int j=1; j<Ny-1; j++) { // from 1 to Ny-1 because top and bottom boundaries shouldn't change.
@@ -79,7 +83,9 @@ int main(int argc, char *argv[]) {
         }
     }
     
-    cout << endl;
+    if(show_progress){
+        cout << endl;
+    }
     float sum = 0;
     ofstream outputFile;
     outputFile.open("output.csv", ios::out);
@@ -99,5 +105,5 @@ int main(int argc, char *argv[]) {
     gettimeofday(&b, 0);
     double elapsed_time = elapsed(a, b);
     saveStats(elapsed_time, sum, Nx, Ny, Nprocs, "OpenMP");
-    cout << "elapsed time: " << elapsed_time << endl;
+    cout << "elapsed time [s]: " << elapsed_time << endl;
 }

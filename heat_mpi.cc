@@ -39,7 +39,7 @@ int main(int argc, char *argv[]) {
         MPI_Barrier(MPI_COMM_WORLD);  // give the master time to complain before everyone exits
         MPI_Finalize();
         exit(WRONG_ARGS);
-    } else {
+    } else {
         Nx = atoi( argv[1] );
     }
     Ny = Nx;
@@ -87,13 +87,6 @@ int main(int argc, char *argv[]) {
     float outer_left_edge[Ny];  // holds left neighbor's boundary, after we receive it
     float outer_right_edge[Ny];
     
-//     if (world_rank==0){
-//         cout << "(Nx, Nx_local, Ny) = (" << Nx<<','<<Nx_local<<','<<Ny << ')' << endl;
-//         cout << "T has shape (" << local_xwidth <<','<< Ny <<','<< 2 << ')' << endl;
-//         cout << "(imin, imax) = (" << imin << ',' << imax << ')' << endl;
-//         cout << "(guardleft, guardright) = (" << guardleft << ',' << guardright << ')' << endl;
-//     }
-    
     // Initialize local arrays
     for(int i=guardleft; i<=guardright; i++){
         for(int j=0; j<Ny; j++){
@@ -109,7 +102,10 @@ int main(int argc, char *argv[]) {
             T[i][Ny-1][k] = pow(sin((float) getGlobalXCoord(i,world_rank,Nx_local,world_size) * dx), 2);
         }
     }
-    
+    int show_progress = 0;
+    if(world_rank==0 && getenv("HEAT_PROGRESS")!=NULL){
+        show_progress = atoi(getenv("HEAT_PROGRESS"));
+    }
     MPI_Barrier(MPI_COMM_WORLD);  // wait until all nodes have done their initial setup
     for (int k=0; k<Nsteps; k++) {
         int this_k = k%2;  // use this to decide whether which is the 'current' work array...
@@ -122,8 +118,8 @@ int main(int argc, char *argv[]) {
         for(int j=0; j<Ny; j++){
             inner_right_edge[j] = T[imax][j][this_k];
         }
-        if(world_rank==0){
-            cout << "\rStep " << k << " of " << Nsteps << " (" << float(k)/Nsteps*100 << "% done).";
+        if(world_rank==0 && show_progress){
+            cout << "\rStep " << k << " of " << Nsteps-1 << " (" << float(k)/(Nsteps-1)*100 << "% done).        ";
         }
         
         MPI_Barrier(MPI_COMM_WORLD);
@@ -139,7 +135,6 @@ int main(int argc, char *argv[]) {
         for(int j=0; j<Ny; j++){
             T[guardright][j][this_k] = outer_right_edge[j];
         }
-//         cout << "getting " << outer_right_edge[3] << " from " << left_rank << endl;
         
         // now that we have both (overlap) borders, we can do math with it
         for (int i=imin; i<=imax; i++) { // don't update the borders ("guard cells")
@@ -151,6 +146,9 @@ int main(int argc, char *argv[]) {
                                     );
             }
         }
+    }
+    if(world_rank==0 && show_progress){
+        cout << endl;
     }
     MPI_Barrier(MPI_COMM_WORLD);
     MPI_Send(&T, Ny*(local_xwidth)*2, MPI_FLOAT, 0, world_rank, MPI_COMM_WORLD);
@@ -168,7 +166,6 @@ int main(int argc, char *argv[]) {
                 }
             }
         }
-        cout << endl;
         ofstream outputFile;
         outputFile.open("output.csv", ios::out);
         for (int j=0; j<Ny; j++) {
@@ -189,7 +186,7 @@ int main(int argc, char *argv[]) {
         gettimeofday(&b, 0);
         double elapsed_time = elapsed(a, b);
         saveStats(elapsed_time, sum, Nx, Ny, world_size, "mpi");
-        cout << "elapsed time: " << elapsed_time << endl;
+        cout << "elapsed time [s]: " << elapsed_time << endl;
     }
     MPI_Finalize();
     return 0;

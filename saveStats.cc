@@ -2,9 +2,10 @@
 using namespace std;
 
 void saveStats(const double elapsed, const double sum, const int Nx, const int Ny, const int world_size, const char *info){
-    cout << "sum is " << sum << endl;
+    cout << "problem size:     " << Nx*Ny << endl;
+    cout << "sum:              " << sum << endl;
     float mean = sum / Ny / Nx;
-    cout << "mean is " << mean << endl;
+    cout << "mean:             " << mean << endl;
 
     ofstream statsFile;
     char buffer [50];
