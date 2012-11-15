@@ -90,13 +90,13 @@ int main(int argc, char *argv[]) {
     ofstream outputFile;
     outputFile.open("output.csv", ios::out);
     // outputFile.write((char *) T, sizeof T);
-    for (int i=0; i<Nx; i++) {
-        for (int j=0; j<Ny-1; j++) {
+    for (int j=0; j<Ny; j++) {
+        for (int i=0; i<Nx-1; i++) {
             outputFile << T[i][j][1] << ", ";
             sum += T[i][j][1];
         }
-        outputFile << T[i][Ny-1][1];
-        sum += T[i][Ny-1][1];
+        outputFile << T[Nx-1][j][1];
+        sum += T[Nx-1][j][1];
         outputFile << endl;
     }
     outputFile.close();
