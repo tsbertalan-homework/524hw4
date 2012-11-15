@@ -1,16 +1,17 @@
-// #include <stdio>
 #include <math.h>
 #include <cmath>
 #include <iostream>
 #include <fstream>
 #include<stdlib.h>
-// #include <mpi.h>
+#include "elapsed.h"
 
 #define SIZE 96
 
 using namespace std;
 
 int main(int argc, char *argv[]) {
+    timeval a;
+    gettimeofday(&a, 0);
     int Nx, Ny;
     if(argc != 2) {
         Nx = 32;
@@ -84,8 +85,12 @@ int main(int argc, char *argv[]) {
         outputFile << T[i][Ny-1][1];
         outputFile << endl;
     }
+    outputFile.close();
+    
+    timeval b;
+    gettimeofday(&b, 0);
+    cout << "elapsed time: " << elapsed(a, b) << endl;
 //     for (int i=0; i<Nx; i++) {
 //         cout << T[i][8][1] << endl;
 //     }
-    outputFile.close();
 }

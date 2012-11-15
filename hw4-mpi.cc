@@ -4,6 +4,8 @@
 #include <math.h>
 #include <cmath>
 #include <fstream>
+#include "elapsed.h"
+
 #define SIZE 100
 using namespace std;
 
@@ -19,6 +21,10 @@ int getGlobalXCoord(const int i, const int world_rank, const int Nx_local, const
 }
 
 int main(int argc, char *argv[]) {
+    if(world_rank==0){
+        timeval a;
+        gettimeofday(&a, 0);
+    }
     int Nx, Ny;
     if(argc != 2) {
         Nx = 32;
@@ -180,6 +186,11 @@ int main(int argc, char *argv[]) {
         statsFile.close();
     }
     MPI_Barrier(MPI_COMM_WORLD);  // allow file activity on the master node to complete before finalizing. I'm not sure if this is actually important.
+    if(world_rank==0){
+        timeval b;
+        gettimeofday(&b, 0);
+        cout << "elapsed time: " << elapsed(a, b) << endl;
+    }
     MPI_Finalize();
     return 0;
 }
