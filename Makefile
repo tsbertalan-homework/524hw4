@@ -3,10 +3,10 @@ CFLAGS  = -g #-Wall -Pedantic
 all: serial omp mpi
 
 serial:
-	g++ ${CFLAGS} -o hw4-serial.exe hw4.cc elapsed.cc saveStats.cc
+	g++ ${CFLAGS} -o heat_serial heat_serial.cc elapsed.cc saveStats.cc
 omp:
-	g++ -fopenmp ${CFLAGS} -o hw4-OpenMP.exe hw4.cc elapsed.cc saveStats.cc
+	g++ -fopenmp ${CFLAGS} -o heat_omp heat_omp.cc elapsed.cc saveStats.cc
 mpi:
-	mpic++ ${CFLAGS} -o hw4-mpi.exe hw4-mpi.cc elapsed.cc saveStats.cc -lm
+	mpic++ ${CFLAGS} -o heat_mpi heat_mpi.cc elapsed.cc saveStats.cc -lm
 clean:
-	rm -f hw4.o hw4-serial.exe hw4-OpenMP.exe hw4-OpenMP.exe
+	rm -f heat_serial heat_omp heat_mpi

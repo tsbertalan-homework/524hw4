@@ -17,7 +17,7 @@ do
     for N_PROCS in 8 2 4 1
     do
         echo "N_PROCS=$N_PROCS"
-        COMMAND="mpirun -np $N_PROCS hw4-mpi.exe $NX"
+        COMMAND="mpirun -np $N_PROCS heat_mpi $NX"
         /usr/bin/time -f "$NX $N_PROCS %e" --output=time_output $COMMAND
         echo ""
         cat time_output | tee -a $FILENAME

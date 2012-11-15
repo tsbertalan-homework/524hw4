@@ -18,7 +18,7 @@ do
     do
         echo "N_PROCS=$N_PROCS"
         export OMP_NUM_THREADS=$N_PROCS
-        COMMAND="./hw4-OpenMP.exe $NX"
+        COMMAND="./heat_omp $NX"
         /usr/bin/time -f "$NX $N_PROCS %e" --output=time_output $COMMAND
         echo ""
         cat time_output | tee -a $FILENAME

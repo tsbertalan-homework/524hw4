@@ -14,7 +14,7 @@ for NX in $NX_LIST
 do
     echo ""
     echo "NX=$NX"
-    COMMAND="./hw4-serial.exe $NX"
+    COMMAND="./heat_serial $NX"
     /usr/bin/time -f "$NX %e" --output=time_output $COMMAND
     echo ""
     cat time_output | tee -a $FILENAME
