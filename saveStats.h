@@ -7,5 +7,6 @@
 #include <stdlib.h>
 
 
-int    saveStats(const double elapsed, const double sum, const int Nx, const int Ny, const int world_size, const char *info);
+void saveStats(const double elapsed, const double sum, const int Nx, const int Ny, const int world_size, const char *info);
 #endif
+

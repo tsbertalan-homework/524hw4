@@ -33,7 +33,7 @@ int main(int argc, char *argv[]) {
     float dx = (xmax - x0) / Nx;
     float dy = (ymax - y0) / Ny;
     float dt = dx * dy / 4 / kappa;
-    int Nsteps = std::ceil((tmax - t0) / dt);
+    int Nsteps = (int)std::ceil((tmax - t0) / dt);
     float T[Nx][Ny][2];
     cout << "sizeof(T) is: " << sizeof(T) << endl;
 

@@ -6,3 +6,4 @@
 double elapsed(timeval a, timeval b);
 
 #endif
+

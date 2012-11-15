@@ -1,7 +1,7 @@
 #include "saveStats.h"
 using namespace std;
 
-int    saveStats(const double elapsed, const double sum, const int Nx, const int Ny, const int world_size, const char *info){
+void saveStats(const double elapsed, const double sum, const int Nx, const int Ny, const int world_size, const char *info){
     cout << "sum is " << sum << endl;
     float mean = sum / Ny / Nx;
     cout << "mean is " << mean << endl;
@@ -18,5 +18,5 @@ int    saveStats(const double elapsed, const double sum, const int Nx, const int
     statsFile << "world_size=" << world_size << endl;
     statsFile << "info=" << info << endl;  // probably something like 'mpi' or 'omp' or 'serial'
     statsFile.close();
-    
 }
+
