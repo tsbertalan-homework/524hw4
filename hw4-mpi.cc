@@ -178,7 +178,7 @@ int main(int argc, char *argv[]) {
         
         ofstream statsFile;
         char buffer [50];
-        int stats_filename = sprintf(buffer, "stats%dx%d.txt", Nx, Ny);
+        int stats_filename = sprintf(buffer, "stats%dx%d-%dprocs.txt", Nx, Ny, world_size);
         statsFile.open(buffer, ios::out);
         statsFile << "sum=" << sum << endl;
         statsFile << "mean=" << mean << endl;
