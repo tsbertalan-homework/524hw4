@@ -1,3 +1,4 @@
+'''This is a prototype implementation.'''
 import numpy as np
 import sys
 import matplotlib.pyplot as plt
