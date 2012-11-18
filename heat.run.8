@@ -1,12 +1,12 @@
 #!/bin/bash
-#
-#PBS -l nodes=1:ppn=8
-#PBS -l walltime=00:44:00
+#PBS -l nodes=1:ppn=8,walltime=01:00:00
 #PBS -m abe
-#PBS -M bertalan@princeton.edu
-#
-nthreads="8"
+#PBS -V
 
 module load openmpi
-cd /home/bertalan/524hw4
-sh hw4-all_tests.sh $nthreads
+cd /home/bertalan/524hw4/
+for nx in 128 256 512 1024
+do
+    ./heat_omp $nx 8 > heat_omp.$nx.8.out
+    mpiexec -np 8 --mca btl ^openib ./heat_mpi $nx > heat_mpi.$nx.8.out
+done
