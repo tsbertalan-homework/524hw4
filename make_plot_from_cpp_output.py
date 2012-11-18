@@ -14,7 +14,10 @@ Ny = T.shape[1]
 fig1 = plt.figure(1, figsize=(6, 4), dpi=100)
 ax1 = fig1.add_subplot(1, 1, 1)
 x, y = np.mgrid[0:Nx, 0:Ny]
-ax1.imshow(T, cmap='hot', interpolation='nearest')
+ax1.imshow(T, cmap='hot', interpolation='nearest', origin='lower')
+print "T has shape", T.shape
+plt.xticks([0, T.shape[0]-1], ['0', r'$\pi$'])
+plt.yticks([0, T.shape[1]-1], ['0', r'$\pi$'])
 CS = ax1.contour(y, x, T)
 plt.clabel(CS, inline=1, fontsize=10)
 filename = 'heatmap_from_cpp.png'
