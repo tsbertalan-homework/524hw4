@@ -22,8 +22,8 @@ int getGlobalXCoord(const int i, const int world_rank, const int Nx_local, const
 }
 
 int main(int argc, char *argv[]) {
-    timeval a;
-    gettimeofday(&a, 0);
+    clock_t start, end;
+    start = clock();
     MPI_Init(NULL, NULL);
     int world_rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
@@ -182,9 +182,8 @@ int main(int argc, char *argv[]) {
     }
     MPI_Barrier(MPI_COMM_WORLD);  // allow file activity on the master node to complete before finalizing. I'm not sure if this is actually important.
     if(world_rank==0){
-        timeval b;
-        gettimeofday(&b, 0);
-        double elapsed_time = elapsed(a, b);
+        end = clock();
+        double elapsed_time = elapsed(start, end);
         saveStats(elapsed_time, sum, Nx, Ny, world_size, "mpi");
         cout << "elapsed time [s]: " << elapsed_time << endl;
     }

@@ -11,8 +11,8 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
-    timeval a;
-    gettimeofday(&a, 0);
+    clock_t start, end;
+    start = clock();
     int Nx, Ny;
     if(argc != 2) {
         cerr << "USAGE: " << argv[0] << " <nx>" << endl;
@@ -97,9 +97,8 @@ int main(int argc, char *argv[]) {
     }
     outputFile.close();
 
-    timeval b;
-    gettimeofday(&b, 0);
-    double elapsed_time = elapsed(a, b);
+    end = clock();
+    double elapsed_time = elapsed(start, end);
     int world_size = 1;
     saveStats(elapsed_time, sum, Nx, Ny, world_size, "serial");
     cout << "elapsed time [s]: " << elapsed_time << endl;

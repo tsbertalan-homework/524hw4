@@ -11,8 +11,8 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
-    timeval a;
-    gettimeofday(&a, 0);
+    clock_t start, end;
+    start = clock();
     int Nx, Ny;
     int Nprocs;
     if(argc != 3) {
@@ -101,9 +101,8 @@ int main(int argc, char *argv[]) {
     }
     outputFile.close();
 
-    timeval b;
-    gettimeofday(&b, 0);
-    double elapsed_time = elapsed(a, b);
+    end = clock();
+    double elapsed_time = elapsed(start, end);
     saveStats(elapsed_time, sum, Nx, Ny, Nprocs, "OpenMP");
     cout << "elapsed time [s]: " << elapsed_time << endl;
 }
