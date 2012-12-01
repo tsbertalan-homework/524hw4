@@ -5,6 +5,10 @@ all: serial omp mpi
 
 
 opt-test: serial-nonopt serial-opt1 serial-opt2 serial-opt3
+
+ranktest:
+	mpicc ranktest.c -o ranktest
+
 serial-nonopt:
 	g++ ${CFLAGS} -o heat_serial_O0 heat_serial.cc ${FUNCTIONS}
 serial-opt1:
@@ -24,4 +28,4 @@ mpi:
 	# 'feupdateenv is not implemented and will always fail' http://tinyurl.com/feupdateenv
 	# but this doesn't work on my own machines, just Adroit.
 clean:
-	rm -f heat_serial heat_omp heat_mpi heat_serial_O*
+	rm -f heat_serial heat_omp heat_mpi heat_serial_O* ranktest
