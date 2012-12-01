@@ -1,0 +1,48 @@
+tsbertalan@perrin:~/svn/524hw4$ sudo aptitude search mpich
+E: Could not get lock /var/lib/dpkg/lock - open (11: Resource temporarily unavailable)
+E: Unable to lock the administration directory (/var/lib/dpkg/), is another process using it?
+p   gromacs-mpich                                                                 - Molecular dynamics sim, binaries for MPICH parallelization                              
+p   libhdf5-mpich-1.8.4                                                           - Hierarchical Data Format 5 (HDF5) - runtime files - MPICH version                       
+p   libhdf5-mpich-dev                                                             - Hierarchical Data Format 5 (HDF5) - development files - MPICH version                   
+p   libmeep-mpich-dev                                                             - development library for using parallel (mpich) version of meep                          
+p   libmeep-mpich6                                                                - library for using parallel (mpich) version of meep                                      
+v   libmpich-dev                                                                  -                                                                                         
+p   libmpich-mpd1.0-dev                                                           - mpich static libraries and development files                                            
+p   libmpich-mpd1.0gf                                                             - mpich-mpd runtime shared library                                                        
+p   libmpich-shmem1.0-dev                                                         - mpich static libraries and development files                                            
+p   libmpich-shmem1.0gf                                                           - mpich-shmem runtime shared library                                                      
+p   libmpich1.0-dev                                                               - mpich static libraries and development files                                            
+p   libmpich1.0gf                                                                 - mpich runtime shared library                                                            
+p   libmpich2-1.2                                                                 - Shared libraries for MPICH2                                                             
+p   libmpich2-dev                                                                 - Development files for MPICH2                                                            
+p   meep-mpich                                                                    - software package for FDTD simulation, parallel (mpich) version                          
+p   mpich-bin                                                                     - MPI parallel computing system implementation                                            
+p   mpich-mpd-bin                                                                 - MPI parallel computing system implementation, MPD version                               
+p   mpich-shmem-bin                                                               - MPI parallel computing system implementation, SHMEM version                             
+p   mpich2                                                                        - Implementation of the MPI Message Passing Interface standard                            
+p   mpich2-doc                                                                    - Documentation for MPICH2                                                                
+p   mpichpython                                                                   - MPI-enhanced Python interpreter (MPICH based version)                                   
+p   netpipe-mpich                                                                 - A network performance tool using MPICH MPI                                              
+p   yorick-mpy-mpich2                                                             - Message Passing Yorick (MPICH2 build)                                                   
+tsbertalan@perrin:~/svn/524hw4$ sudo aptitude search openmpi
+E: Could not get lock /var/lib/dpkg/lock - open (11: Resource temporarily unavailable)
+E: Unable to lock the administration directory (/var/lib/dpkg/), is another process using it?
+p   gromacs-openmpi                                                               - Molecular dynamics sim, binaries for OpenMPI parallelization                            
+p   libhdf5-openmpi-1.8.4                                                         - Hierarchical Data Format 5 (HDF5) - runtime files - OpenMPI version                     
+p   libhdf5-openmpi-dev                                                           - Hierarchical Data Format 5 (HDF5) - development files - OpenMPI version                 
+p   libmeep-openmpi-dev                                                           - development library for using parallel (OpenMPI) version of meep                        
+p   libmeep-openmpi6                                                              - library for using parallel (OpenMPI) version of meep                                    
+p   libopenmpi-dbg                                                                - high performance message passing library -- debug library                               
+i   libopenmpi-dev                                                                - high performance message passing library -- header files                                
+i A libopenmpi1.3                                                                 - high performance message passing library -- shared library                              
+p   meep-openmpi                                                                  - software package for FDTD simulation, parallel (OpenMPI) version                        
+p   mpqc-openmpi                                                                  - The Massively Parallel Quantum Chemistry Program (OpenMPI Version)                      
+i   openmpi-bin                                                                   - high performance message passing library -- binaries                                    
+i A openmpi-checkpoint                                                            - high performance message passing library -- checkpoint support                          
+i   openmpi-common                                                                - high performance message passing library -- common files                                
+v   openmpi-dbg                                                                   -                                                                                         
+v   openmpi-dev                                                                   -                                                                                         
+p   openmpi-doc                                                                   - high performance message passing library -- man pages                                   
+v   openmpi-libs0                                                                 -                                                                                         
+v   openmpi-mpidoc                                                                -                                                                                         
+p   yorick-mpy-openmpi                                                            - Message Passing Yorick (OpenMPI build) 
