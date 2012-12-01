@@ -1,0 +1,52 @@
+tsbertalan@hustlenbustle:~/Documents/School/12fall2012/524apc524/hw/hw4$ sudo aptitude search mpich
+[sudo] password for tsbertalan: 
+p   gromacs-mpich                                                                 - Molecular dynamics sim, binaries for MPICH parallelization                              
+p   libhdf5-mpich-1.8.4                                                           - Hierarchical Data Format 5 (HDF5) - runtime files - MPICH version                       
+p   libhdf5-mpich-dev                                                             - Hierarchical Data Format 5 (HDF5) - development files - MPICH version                   
+v   libmpich-dev                                                                  -                                                                                         
+p   libmpich-mpd1.0-dev                                                           - mpich static libraries and development files                                            
+p   libmpich-mpd1.0gf                                                             - mpich-mpd runtime shared library                                                        
+p   libmpich-shmem1.0-dev                                                         - mpich static libraries and development files                                            
+p   libmpich-shmem1.0gf                                                           - mpich-shmem runtime shared library                                                      
+p   libmpich1.0-dev                                                               - mpich static libraries and development files                                            
+p   libmpich1.0gf                                                                 - mpich runtime shared library                                                            
+c   libmpich2-1.2                                                                 - Shared libraries for MPICH2                                                             
+c   libmpich2-2                                                                   - Shared libraries for MPICH2                                                             
+i A libmpich2-3                                                                   - Shared libraries for MPICH2                                                             
+i A libmpich2-dev                                                                 - Development files for MPICH2                                                            
+p   mpich-bin                                                                     - MPI parallel computing system implementation                                            
+p   mpich-mpd-bin                                                                 - MPI parallel computing system implementation, MPD version                               
+p   mpich-shmem-bin                                                               - MPI parallel computing system implementation, SHMEM version                             
+i   mpich2                                                                        - Implementation of the MPI Message Passing Interface standard                            
+p   mpich2-doc                                                                    - Documentation for MPICH2                                                                
+p   mpichpython                                                                   - MPI-enhanced Python interpreter (MPICH based version)                                   
+p   netpipe-mpich                                                                 - A network performance tool using MPICH MPI                                              
+p   yorick-mpy-mpich2                                                             - Message Passing Yorick (MPICH2 build)                                                   
+tsbertalan@hustlenbustle:~/Documents/School/12fall2012/524apc524/hw/hw4$ sudo aptitude search openmpi
+p   gromacs-openmpi                                                               - Molecular dynamics sim, binaries for OpenMPI parallelization                            
+i A libhdf5-openmpi-1.8.4                                                         - Hierarchical Data Format 5 (HDF5) - runtime files - OpenMPI version                     
+p   libhdf5-openmpi-dev                                                           - Hierarchical Data Format 5 (HDF5) - development files - OpenMPI version                 
+p   libmeep-openmpi-dev                                                           - development library for using parallel (OpenMPI) version of meep                        
+p   libmeep-openmpi6                                                              - library for using parallel (OpenMPI) version of meep                                    
+p   libopenmpi-dbg                                                                - high performance message passing library -- debug library                               
+i A libopenmpi-dev                                                                - high performance message passing library -- header files                                
+i   libopenmpi1.3                                                                 - high performance message passing library -- shared library                              
+p   libopenmpi1.5-2                                                               - high performance message passing library -- shared library                              
+p   libopenmpi1.5-dbg                                                             - high performance message passing library -- debug library                               
+p   libopenmpi1.5-dev                                                             - high performance message passing library -- header files                                
+p   meep-openmpi                                                                  - software package for FDTD simulation, parallel (OpenMPI) version                        
+p   mpqc-openmpi                                                                  - Massively Parallel Quantum Chemistry Program (OpenMPI transitional package)             
+i   openmpi-bin                                                                   - high performance message passing library -- binaries                                    
+i   openmpi-checkpoint                                                            - high performance message passing library -- checkpoint support                          
+i   openmpi-common                                                                - high performance message passing library -- common files                                
+v   openmpi-dbg                                                                   -                                                                                         
+v   openmpi-dev                                                                   -                                                                                         
+i   openmpi-doc                                                                   - high performance message passing library -- man pages                                   
+v   openmpi-libs0                                                                 -                                                                                         
+v   openmpi-mpidoc                                                                -                                                                                         
+p   openmpi1.5-bin                                                                - high performance message passing library -- binaries                                    
+p   openmpi1.5-checkpoint                                                         - high performance message passing library -- checkpoint support                          
+p   openmpi1.5-common                                                             - high performance message passing library -- common files                                
+p   openmpi1.5-doc                                                                - high performance message passing library -- man pages                                   
+p   yorick-mpy-openmpi                                                            - Message Passing Yorick (OpenMPI build)                                                  
+tsbertalan@hustlenbustle:~/Documents/School/12fall2012/524apc524/hw/hw4$ 
